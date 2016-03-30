@@ -34,8 +34,15 @@ public class DisplayServlet extends HttpServlet{
 		}
 		request.setAttribute("persons", personDtos);
     	request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
-		
-		
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
+		if (request.getParameter("delete") != null){
+			for(String id : request.getParameterValues("personId")){
+				personService.deletePerson(Integer.parseInt(id));
+			}
+			doGet(request, response);
+		}
 	}
 	
 	public void destroy() {

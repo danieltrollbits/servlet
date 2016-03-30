@@ -3,12 +3,14 @@ package com.training.hibernate;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.util.List;
+import java.util.*;
 import com.training.hibernate.dto.PersonDto;
+import com.training.hibernate.dto.RoleDto;
 import com.training.hibernate.model.Gender;
 import com.training.hibernate.model.Type;
-import org.apache.commons.beanutils.BeanUtils;
-
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 import com.training.hibernate.services.*;
 
 public class PersonServlet extends HttpServlet{
@@ -37,22 +39,38 @@ public class PersonServlet extends HttpServlet{
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
 		if(request.getParameter("save") != null){
 			PersonDto personDto = new PersonDto();
-			System.out.println(request.getParameter("address"));
-			/*BeanUtils.populate(personDto,request);
 			if(request.getParameter("personId").isEmpty()){
 				personDto.setId(Integer.parseInt(request.getParameter("personId")));
 			}
 			else{
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+				Date date = null;
+				try{
+					date = df.parse(request.getParameter("birthdate"));
+				}catch(ParseException e){
+					e.printStackTrace();
+				}	
 				personDto.setFirstName(request.getParameter("firstName"));
 				personDto.setMiddleName(request.getParameter("middleName"));
 				personDto.setLastName(request.getParameter("lastName"));
 				personDto.setGender(Gender.valueOf(request.getParameter("gender").toUpperCase()));
-				personDto.setBirthdate(request.getParameter("birthdate"));
-				personDto.setEmployed(request.getParameter("employed"));
-				personDto.setGwa(request.getParameter("gwa"));
-				personDto.setRoles(request.getParameterValues("role"));
+				personDto.setBirthdate(date);
+				if(request.getParameter("employed").equals("yes")){
+					personDto.setEmployed(true);	
+				}
+				else{
+					personDto.setEmployed(false);
+				}
+				personDto.setGwa(Float.parseFloat(request.getParameter("gwa")));
+				Set<RoleDto> roles = new HashSet<>();
+				for(String role : request.getParameterValues("role")){
+					RoleDto roleDto = new RoleDto(role);
+					roles.add(roleDto);
+				}
+				personDto.setRoles(roles);
 			}
-			personService.updatePerson(personDto);*/
+			personService.updatePerson(personDto);
+			request.getRequestDispatcher("/WEB-INF/views/add_person.jsp").forward(request, response);
 		}
 	}
 	

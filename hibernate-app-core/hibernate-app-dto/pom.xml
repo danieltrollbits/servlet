@@ -3,7 +3,7 @@
   
   <parent>
     <groupId>com.training.hibernate</groupId>
-    <artifactId>core-module</artifactId>
+    <artifactId>hibernate-app-core</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 

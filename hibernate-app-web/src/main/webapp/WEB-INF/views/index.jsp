@@ -26,32 +26,34 @@
 				<form action="${pageContext.request.contextPath}/person" method="get">
 					<button type="submit" value="add" name="add">Add</button>
 					<button type="submit" value="update" name="update">Update</button>
-				</form>
-				<button type="submit" value="delete">Delete</button><hr>
-				<table border="1">
-				<thead>
-				<tr>
-					<th>id</th>
-					<th>first name</th>
-					<th>middle name</th>
-					<th>last name</th>
-					<th>gender</th>
-					<th>birthdate</th>
-				</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="person" items="${persons}">
+					<button type="submit" value="delete">Delete</button><hr>
+					<table border="1">
+						<thead>
 						<tr>
-							<td>${person.id}</td>
-							<td>${person.firstName}</td>
-							<td>${person.middleName}</td>
-							<td>${person.lastName}</td>
-							<td>${person.gender}</td>
-							<td><fmt:formatDate type="date" value="${person.birthdate}"/></td>
+							<th></th>
+							<th>id</th>
+							<th>first name</th>
+							<th>middle name</th>
+							<th>last name</th>
+							<th>gender</th>
+							<th>birthdate</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+						</thead>
+						<tbody>
+							<c:forEach var="person" items="${persons}">
+								<tr>
+									<td><input type="checkbox" name="personId" value="${person.id}"></td>
+									<td>${person.id}</td>
+									<td>${person.firstName}</td>
+									<td>${person.middleName}</td>
+									<td>${person.lastName}</td>
+									<td>${person.gender}</td>
+									<td><fmt:formatDate type="date" value="${person.birthdate}"/></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</form>
 			</fieldset>	
 		</div>
 
