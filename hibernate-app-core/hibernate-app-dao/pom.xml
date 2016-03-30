@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.training.hibernate</groupId>
+    <artifactId>hibernate-app-core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.training.hibernate</groupId>
+  <artifactId>hibernate-app-dao</artifactId>
+  <packaging>jar</packaging>
+  <name>hibernate-app-dao</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.training.hibernate</groupId>
+      <artifactId>hibernate-app-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.training.hibernate</groupId>
+      <artifactId>hibernate-app-infra</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.training.hibernate</groupId>
+      <artifactId>hibernate-app-util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.training.hibernate</groupId>
+      <artifactId>hibernate-app-dto</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+   <session-factory>
+   <property name="hibernate.dialect">
+      org.hibernate.dialect.MySQLDialect
+   </property>
+   <property name="hibernate.connection.driver_class">
+      com.mysql.jdbc.Driver
+   </property>
+   <property name="hibernate.connection.url">
+      jdbc:mysql://localhost/exercisedb
+   </property>
+   <property name="hibernate.connection.username">
+      root
+   </property>
+   <property name="hibernate.connection.password">
+      password
+   </property>
+
+   <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+   <property name="hibernate.cache.use_second_level_cache">true</property>
+   <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+ 
+   <!-- <property name="hibernate.hbm2ddl.auto">create-drop</property>
+   <property name="hibernate.hbm2ddl.import_files">
+      /03.21.2016.sql
+   </property> -->
+   <property name="show_sql">true</property>
+   <mapping class="com.training.hibernate.model.Person"/>
+   <mapping class="com.training.hibernate.model.Address"/>
+   <mapping class="com.training.hibernate.model.Contact"/>
+   <mapping class="com.training.hibernate.model.Role"/>
+   </session-factory>
+</hibernate-configuration>
