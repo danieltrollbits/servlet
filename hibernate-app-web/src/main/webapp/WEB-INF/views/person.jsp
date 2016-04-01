@@ -58,7 +58,7 @@
 					<input type="checkbox" name="role" value="Software Developer"> Sofware Developer<br>
 					<input type="checkbox" name="role" value="QA Engineer"> QA Engineer<br>
 					<input type="checkbox" name="role" value="Fasttrack Instructor"> Fasttrack Instructor<br>
-					<input type="checkbox" name="role" value="Project Manager" ${pmChecked}> Project Manager
+					<input type="checkbox" name="role" value="Project Manager"> Project Manager
 				</fieldset>
 			</fieldset>
 		</div>

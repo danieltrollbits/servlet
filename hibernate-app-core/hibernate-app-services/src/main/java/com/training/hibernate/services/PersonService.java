@@ -34,8 +34,8 @@ public class PersonService {
 		return personDao.searchPerson(lastName, firstName, middleName, role);
 	}
 
-	public Set<RoleDto> getRolesByPerson(PersonDto personDto){
-		return personDao.getRolesByPerson(personDto);
+	public List<RoleDto> getRoles(){
+		return personDao.getRoles();
 	}
 
 }

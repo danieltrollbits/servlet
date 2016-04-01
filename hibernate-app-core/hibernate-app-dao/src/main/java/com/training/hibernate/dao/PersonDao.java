@@ -18,7 +18,7 @@ public class PersonDao {
 	public List<PersonDto> getAllPersons() throws HibernateException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-		Criteria criteria = session.createCriteria(Person.class);
+		Criteria criteria = session.createCriteria(Person.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Person> persons = criteria.list();
 		List<PersonDto> personDtos = new ArrayList<>();
 		for(Person person : persons){
@@ -43,7 +43,7 @@ public class PersonDao {
 	public List<PersonDto> searchPerson(String lastName, String firstName, String middleName, String role) throws HibernateException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
-		Criteria criteria = session.createCriteria(Person.class);
+		Criteria criteria = session.createCriteria(Person.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		if (!lastName.isEmpty()){
 			criteria.add(Restrictions.eq("lastName",lastName));	
 		}
@@ -53,9 +53,10 @@ public class PersonDao {
 		if(!middleName.isEmpty()){
 			criteria.add(Restrictions.eq("middleName",middleName));	
 		}
-		/*if (role != null){
-			criteria.add(Restrictions.eq("role",role));	
-		}*/
+		if (!role.isEmpty()){
+			criteria.createAlias("roles","role");
+			criteria.add(Restrictions.in("role.role",role));	
+		}
 		List<Person> persons = criteria.list();
 		List<PersonDto> personDtos = new ArrayList<>();
 		for(Person person : persons){
@@ -161,15 +162,13 @@ public class PersonDao {
 		return role;
 	}
 
-	public Set<RoleDto> getRolesByPerson(PersonDto personDto){
-		Person person = toEntity(personDto);
+	public List<RoleDto> getRoles(){
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		Set<RoleDto> roleDtos = new HashSet<>();
+		List<RoleDto> roleDtos = new ArrayList<>();
 		try{
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Person.class);
-			List<PersonDto> personDtos = criteria.list();
-			roleDtos = personDto.getRoleDtos();
+			Criteria criteria = session.createCriteria(Role.class);
+			roleDtos = criteria.list();
 			session.getTransaction().commit(); 
 		}catch(HibernateException e){
 			e.printStackTrace();

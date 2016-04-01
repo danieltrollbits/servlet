@@ -14,7 +14,7 @@ public class Role extends BaseEntity {
 	@Column(name="role")
 	private String role;
 
-	@ManyToMany(mappedBy = "roles")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
 	private Set<Person> persons;
 
 	public Role() {

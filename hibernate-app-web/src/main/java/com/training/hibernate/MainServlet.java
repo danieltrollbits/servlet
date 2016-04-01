@@ -26,26 +26,24 @@ public class MainServlet extends HttpServlet{
 		Set<RoleDto> roleDtos = null;
 		if (request.getParameter("search") != null){
 			if (request.getParameter("lastName").isEmpty() && request.getParameter("firstName").isEmpty()
-			 && request.getParameter("middleName").isEmpty() && request.getParameter("role").isEmpty()){
+			 && request.getParameter("middleName").isEmpty() && request.getParameter("roles").isEmpty()){
 				personDtos = personService.getAllPersons();
     			
 			}
 			else{
 				personDtos = personService.searchPerson(request.getParameter("lastName"),request.getParameter("firstName"),
-					request.getParameter("middleName"),request.getParameter("role"));
+					request.getParameter("middleName"),request.getParameter("roles"));
 			}
 			request.setAttribute("persons",personDtos);
+			request.setAttribute("roles",personService.getRoles());
 			request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
 		}
 		else{
 			personDtos = personService.getAllPersons();
-			for (PersonDto personDto : personDtos){
-				personDto.setRoleDtos(personService.getRolesByPerson(personDto));
-			}
-			request.setAttribute("persons", getPersonDtos());
+			request.setAttribute("persons", personService.getAllPersons());
+			request.setAttribute("roles",personService.getRoles());
 			request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
 		}
-		// request.setAttribute("roles", roleDtos);
     	
 	}
 
@@ -121,26 +119,27 @@ public class MainServlet extends HttpServlet{
 				}
 				personDto.setContactDtos(contactDtos);
 
+			String message = "";	
 			if(request.getParameter("personId").isEmpty()){
 				try{
 					personService.addPerson(personDto);
-					request.setAttribute("message","Added successfully");
+					message = "Person added";
 				}catch(HibernateException e){
 					e.printStackTrace();
-					request.setAttribute("message","Unable to add person");
+					message = "Failed to add person";
 				}
 			}
 			else{
 				try{
 					personService.updatePerson(personDto);
-					request.setAttribute("message","Updated successfully");
+					message = "Person updated";
 				}catch(HibernateException e){
 					e.printStackTrace();
-					request.setAttribute("message","Unable to update person");
+					message = "Failed to update person";
 				}	
 			}
-			request.setAttribute("persons",getPersonDtos());
-			request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
+			// request.setAttribute("persons",getPersonDtos());
+			response.sendRedirect("/index?message="+message);
 		}
 		//****************************************************************
 
@@ -150,17 +149,9 @@ public class MainServlet extends HttpServlet{
 			for(String id : request.getParameterValues("personId")){
 				personService.deletePerson(Integer.parseInt(id));
 			}
-			request.setAttribute("persons", getPersonDtos());
-			request.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(request, response);
+			// request.setAttribute("persons", getPersonDtos());
+			response.sendRedirect("/index?message=Person deleted");
 		}
-	}
-
-	public List<PersonDto> getPersonDtos(){
-		List<PersonDto> personDtos = personService.getAllPersons();
-		for (PersonDto personDto : personDtos){
-			personDto.setRoleDtos(personService.getRolesByPerson(personDto));
-		}
-		return personDtos;
 	}
 	
 	public void destroy() {
