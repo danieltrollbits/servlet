@@ -6,7 +6,7 @@ public class RoleDto extends BaseDto {
 
 	private String role;
 
-	private Set<PersonDto> persons;
+	private Set<PersonDto> personDtos;
 
 	public RoleDto() {
 	}
@@ -15,9 +15,9 @@ public class RoleDto extends BaseDto {
 		this.role = role;
 	}
 
-	public RoleDto(String role, Set<PersonDto> persons) {
+	public RoleDto(String role, Set<PersonDto> personDtos) {
 		this.role = role;
-		this.persons = persons;
+		this.personDtos = personDtos;
 	}
 
 	public String getRole(){
@@ -28,11 +28,18 @@ public class RoleDto extends BaseDto {
 		this.role = role;
 	}
 
-	public Set<PersonDto> getPersons(){
-		return this.persons;
+	public Set<PersonDto> getPersonDtos(){
+		return this.personDtos;
 	}
 
-	public void setPersons(Set<PersonDto> persons){
-		this.persons = persons;
+	public void setPersonDtos(Set<PersonDto> personDtos){
+		this.personDtos = personDtos;
+	}
+
+	public boolean equals(Object o){
+		if (o.toString().equalsIgnoreCase(this.role))
+			return true;
+		else
+			return false;
 	}
 }

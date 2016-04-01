@@ -37,7 +37,7 @@ public class Person extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL)
 	private Set<Contact> contacts;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(name = "PERSON_ROLE", joinColumns = { 
 			@JoinColumn(name = "person_id", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "role_id", 

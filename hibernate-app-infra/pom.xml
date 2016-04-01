@@ -20,17 +20,28 @@
     </dependency>
   </dependencies>
 
-  <!-- <build>
+  <build>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
-        <includes>
-          <include>**/hibernate.cfg.xml</include>
-          <include>**/03.21.2016.sql</include>
-          <include>**/ehcache.xml</include>
-        </includes>
       </resource>
     </resources>
-  </build> -->
+  </build>
+
+  <profiles>
+   <profile>
+     <id>mysql</id>
+     <activation>
+      <activeByDefault>true</activeByDefault>
+     </activation>
+     <properties>
+      <dialect>org.hibernate.dialect.MySQLDialect</dialect>
+      <driver>com.mysql.jdbc.Driver</driver>
+      <url>jdbc:mysql://localhost/exercisedb</url>
+      <username>root</username>
+      <password>password</password>
+      </properties>
+   </profile>
+ </profiles>
 </project>

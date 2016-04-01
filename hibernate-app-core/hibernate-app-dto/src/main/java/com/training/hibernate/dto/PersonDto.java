@@ -21,9 +21,9 @@ public class PersonDto extends BaseDto {
 	
 	private float gwa;
 	
-	private Set<ContactDto> contacts;
+	private Set<ContactDto> contactDtos;
 	
-	private Set<RoleDto> roles = new HashSet<RoleDto>(0);
+	private Set<RoleDto> roleDtos = new HashSet<RoleDto>(0);
 
 	public PersonDto(){};
 
@@ -105,23 +105,36 @@ public class PersonDto extends BaseDto {
 		this.gwa = gwa;
 	}
 
-	public Set<ContactDto> getContacts(){
-		return this.contacts;
+	public Set<ContactDto> getContactDtos(){
+		return this.contactDtos;
 	}
 
-	public void setContacts(Set<ContactDto> contacts){
-		this.contacts = contacts;
+	public void setContactDtos(Set<ContactDto> contactDtos){
+		this.contactDtos = contactDtos;
 	}
 
-	public Set<RoleDto> getRoles(){
-		return this.roles;
+	public Set<RoleDto> getRoleDtos(){
+		return this.roleDtos;
 	}
 
-	public void setRoles(Set<RoleDto> roles){
-		this.roles = roles;
+	public void setRoleDtos(Set<RoleDto> roleDtos){
+		this.roleDtos = roleDtos;
 	}
 
 	public String toString(){
 		return "name: " + getFullName() + "gender: " + this.gender + "birthdate: " + this.birthdate;
+	}
+
+	public String rolesToString(){
+		String roles = "";
+		int loop = 1;
+		int size = this.roleDtos.size();
+		for (RoleDto roleDto : this.roleDtos){
+			roles += roleDto.getRole();
+			if (loop >= 0 && loop <size)
+				roles += ", ";
+			loop++;
+		}
+		return roles;
 	}
 }

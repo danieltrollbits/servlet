@@ -20,4 +20,5 @@
     <module>hibernate-app-util</module>
     <module>hibernate-app-dto</module>
   </modules>
+
 </project>

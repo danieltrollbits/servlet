@@ -8,7 +8,7 @@ public class ContactDto extends BaseDto {
 
 	private String value;
 
-	private PersonDto person;
+	private PersonDto personDto;
 
 	public ContactDto(){};
 
@@ -33,12 +33,12 @@ public class ContactDto extends BaseDto {
 		this.value = value;
 	}
 
-	public PersonDto getPerson(){
-		return this.person;
+	public PersonDto getPersonDto(){
+		return this.personDto;
 	}
 
-	public void setPerson(PersonDto person){
-		this.person = person;
+	public void setPersonDto(PersonDto personDto){
+		this.personDto = personDto;
 	}
 
 	public String toString(){

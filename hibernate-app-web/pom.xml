@@ -8,10 +8,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <groupId>com.training.hibernate</groupId>
-  <artifactId>web</artifactId>
+  <artifactId>hibernate-app-web</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>web</name>
+  <name>hibernate-app-web</name>
 
   <dependencies>
     <dependency>
