@@ -18,12 +18,8 @@ public class PersonService {
 		return personDao.getPersonById(id);
 	}
 
-	public String addPerson(PersonDto personDto){
-		return personDao.addPerson(personDto);
-	}
-
-	public String updatePerson(PersonDto personDto){
-		return personDao.updatePerson(personDto);
+	public String saveOrUpdatePerson(PersonDto personDto){
+		return personDao.saveOrUpdatePerson(personDto);
 	}
 
 	public String deletePerson(int id){

@@ -70,78 +70,36 @@ public class MainServlet extends HttpServlet{
 
     	//save*****************************************************
     	if(request.getParameter("save") != null){
-			PersonDto personDto = new PersonDto();
-			if(!request.getParameter("personId").isEmpty()){
-				personDto.setId(Integer.parseInt(request.getParameter("personId")));
-			}
-				DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
-				Date date = null;
-				try{
-					date = df.parse(request.getParameter("birthdate"));
-				}catch(ParseException e){
-					e.printStackTrace();
-				}
-				personDto.setFirstName(request.getParameter("firstName"));
-				personDto.setMiddleName(request.getParameter("middleName"));
-				personDto.setLastName(request.getParameter("lastName"));
-				personDto.setGender(Gender.valueOf(request.getParameter("gender").toUpperCase()));
-				personDto.setBirthdate(date);
-				if(request.getParameter("employed").equals("yes")){
-					personDto.setEmployed(true);	
-				}
-				else{
-					personDto.setEmployed(false);
-				}
-				personDto.setGwa(Float.parseFloat(request.getParameter("gwa")));
-				Set<RoleDto> roleDtos = new HashSet<>();
-				for(String role : request.getParameterValues("role")){
-					RoleDto roleDto = new RoleDto(role);
-					roleDtos.add(roleDto);
-				}
-				personDto.setRoleDtos(roleDtos);
-				//address
-				AddressDto addressDto = new AddressDto();
-				addressDto.setStreet(request.getParameter("street"));
-				addressDto.setBarangay(request.getParameter("barangay"));
-				addressDto.setSubdivision(request.getParameter("subdivision"));
-				addressDto.setCity(request.getParameter("city"));
-				addressDto.setZipCode(request.getParameter("zipcode"));
-				addressDto.setHouseNo(Integer.parseInt(request.getParameter("houseNo")));
-				personDto.setAddressDto(addressDto);
-				String[] contactTypeList = request.getParameterValues("contactType");
-				String[] contactValueList = request.getParameterValues("contactValue");
-				Set<ContactDto> contactDtos = new HashSet<>();
-				for (int i=0; i<contactTypeList.length; i++){
-					ContactDto contactDto = new ContactDto();	
-					contactDto.setType(Type.valueOf(contactTypeList[i].toUpperCase()));
-					contactDto.setValue(contactValueList[i]);
-					contactDtos.add(contactDto);
-				}
-				personDto.setContactDtos(contactDtos);
+    		PersonDto personDto  = personDto = createPersonDto(request.getParameter("personId"), request.getParameter("firstName"),
+					request.getParameter("middleName"), request.getParameter("lastName"),
+					request.getParameter("gender"), request.getParameter("birthdate"), request.getParameter("employed"),
+					request.getParameter("gwa"), request.getParameter("street"), request.getParameter("houseNo"),
+					request.getParameter("barangay"), request.getParameter("subdivision"), request.getParameter("city"),
+					request.getParameter("zipcode"), request.getParameterValues("contactType"),
+					request.getParameterValues("contactValue"), request.getParameterValues("contactId"), request.getParameterValues("role"));
 
-			String message = "";	
-			if(request.getParameter("personId").isEmpty()){
+			boolean isValid = validateRequiredFields(request.getParameter("firstName"), request.getParameter("middleName"), request.getParameter("lastName"),
+					request.getParameter("gender"), request.getParameter("birthdate"), request.getParameter("employed"),
+					request.getParameter("gwa"), request.getParameter("street"), request.getParameter("houseNo"),
+					request.getParameter("barangay"), request.getParameter("subdivision"), request.getParameter("city"),
+					request.getParameter("zipcode"), request.getParameterValues("contactType"),
+					request.getParameterValues("contactValue"), request.getParameterValues("role"));
+
+			if (isValid){
+				String message = "";
 				try{
-					personService.addPerson(personDto);
-					message = "Person added";
+					message = personService.saveOrUpdatePerson(personDto);
 				}catch(HibernateException e){
 					e.printStackTrace();
-					message = "Failed to add person";
 				}
+				response.sendRedirect("/index?message="+message);
 			}
 			else{
-				try{
-					personService.updatePerson(personDto);
-					message = "Person updated";
-				}catch(HibernateException e){
-					e.printStackTrace();
-					message = "Failed to update person";
-				}	
-			}
-			// request.setAttribute("persons",getPersonDtos());
-			response.sendRedirect("/index?message="+message);
+				request.setAttribute("message","Missing required fields / Check date format (MMMM dd, yyyy)");
+				request.setAttribute("person",personDto);
+				request.getRequestDispatcher("/WEB-INF/views/person.jsp").forward(request, response);
+			}			
 		}
-		//****************************************************************
 
 
 		//delete *********************************************************
@@ -149,9 +107,102 @@ public class MainServlet extends HttpServlet{
 			for(String id : request.getParameterValues("personId")){
 				personService.deletePerson(Integer.parseInt(id));
 			}
-			// request.setAttribute("persons", getPersonDtos());
 			response.sendRedirect("/index?message=Person deleted");
 		}
+	}
+
+	public PersonDto createPersonDto(String id, String firstName, String middleName, String lastName, String gender, String birthdate,
+		String employed, String gwa, String street, String houseNo, String barangay, String subdivision,
+		String city, String zipCode, String[] contactTypeList, String[] contactValueList, String[] contactId,
+		String[] roleList){
+		
+		PersonDto personDto = new PersonDto();
+		if(!id.isEmpty()){
+			personDto.setId(Integer.parseInt(id));
+		}
+		DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+		Date date = null;
+		try{
+			date = df.parse(birthdate);
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		personDto.setFirstName(firstName);
+		personDto.setMiddleName(middleName);
+		personDto.setLastName(lastName);
+		personDto.setGender(Gender.valueOf(gender.toUpperCase()));
+		personDto.setBirthdate(date);
+		if(employed.equals("yes")){
+			personDto.setEmployed(true);	
+		}
+		else{
+			personDto.setEmployed(false);
+		}
+		personDto.setGwa(Float.parseFloat(gwa));
+		Set<RoleDto> roleDtos = new HashSet<>();
+		if(roleList != null){
+			for(String role : roleList){
+				RoleDto roleDto = new RoleDto(role);
+				roleDtos.add(roleDto);
+			}
+			personDto.setRoleDtos(roleDtos);	
+		}
+		
+		//address
+		AddressDto addressDto = new AddressDto();
+		addressDto.setStreet(street);
+		addressDto.setBarangay(barangay);
+		addressDto.setSubdivision(subdivision);
+		addressDto.setCity(city);
+		addressDto.setZipCode(zipCode);
+		addressDto.setHouseNo(Integer.parseInt(houseNo));
+		personDto.setAddressDto(addressDto);
+		Set<ContactDto> contactDtos = new HashSet<>();
+		if(contactTypeList != null && contactValueList != null){
+			for (int i=0; i<contactTypeList.length; i++){
+				ContactDto contactDto = new ContactDto();
+				if(contactId != null){
+					if(contactId[i] != null){
+						contactDto.setId(Integer.parseInt(contactId[i]));	
+					}
+				}
+				contactDto.setType(Type.valueOf(contactTypeList[i].toUpperCase()));
+				contactDto.setValue(contactValueList[i]);
+				contactDtos.add(contactDto);
+			}	
+		}
+		personDto.setContactDtos(contactDtos);
+		return personDto;
+	}
+
+	public boolean validateRequiredFields(String firstName, String middleName, String lastName, String gender,
+		String birthdate, String employed, String gwa, String street, String houseNo, String barangay,
+		String subdivision, String city, String zipCode, String[] contactTypeList, String[] contactValueList, String[] roleList){
+		boolean isValid = false;
+
+		if(firstName.isEmpty() && middleName.isEmpty() && lastName.isEmpty() && gender.isEmpty() && birthdate.isEmpty() &&
+			gwa.isEmpty() && street.isEmpty() && houseNo.isEmpty() && barangay.isEmpty() && city.isEmpty() &&
+			zipCode.isEmpty() && roleList.length == 0){
+			isValid = false;
+		}
+		else if(!birthdate.isEmpty()){
+			DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+			Date date = null;
+			try{
+				date = df.parse(birthdate);
+				isValid = true;
+			}catch(ParseException e){
+				e.printStackTrace();
+				isValid = false;
+			}
+		}
+		else if(!houseNo.matches("\\d+")){
+			isValid = false;
+		}
+		else{
+			isValid = true;
+		}
+		return isValid;
 	}
 	
 	public void destroy() {

@@ -7,6 +7,7 @@
 </head>
 <body>
 	<form action="${pageContext.request.contextPath}/index" method="post">
+		<span>${message}</span>
 	<div>
 		<fieldset style="margin:5% 10% 1% 10%">
 		<legend>
@@ -77,6 +78,7 @@
 		<div style="margin:2% 2% 2% 2%">
 			<c:forEach var="contact" items="${person.contactDtos}">
 				<span>${contact.type}</span>
+				<input type="hidden" name="contactId" value="${contact.id}">
 				<input type="hidden" name="contactType" value="${contact.type}">
 				<input type="text" name="contactValue" value="${contact.value}"><br>
 			</c:forEach>

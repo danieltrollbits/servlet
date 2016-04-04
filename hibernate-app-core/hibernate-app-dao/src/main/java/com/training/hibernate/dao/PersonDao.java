@@ -67,12 +67,11 @@ public class PersonDao {
 		return personDtos;	
 	}
 
-	public String addPerson(PersonDto personDto) {
+	public String saveOrUpdatePerson(PersonDto personDto) {
 		Person person = toEntity(personDto);
 		Transaction transaction = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		String message;
-		System.out.println(person.toString());
 		
 		for (Contact contact : person.getContacts()){
 			System.out.println(contact.toString());	
@@ -80,37 +79,15 @@ public class PersonDao {
 		System.out.println(person.getAddress().toString());
 		try{
 			transaction = session.beginTransaction();
-			session.save(person);
-			transaction.commit();
-			message = "success";
-		}catch(HibernateException e){
-			if(transaction != null){
-				transaction.rollback();
+			if(personDto.getId() == 0){
+				session.save(person);
+				message = "Person added";
 			}
-			e.printStackTrace();
-			message = "error";
-		}finally{
-			session.close();
-		}
-		return message;
-	}
-
-	public String updatePerson(PersonDto personDto){
-		Person person = toEntity(personDto);
-		String message;
-		Transaction transaction = null;
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		System.out.println(person.toString());
-		
-		for (Contact contact : person.getContacts()){
-			System.out.println(contact.toString());	
-		}
-		System.out.println(person.getAddress().toString());
-		try{
-			transaction = session.beginTransaction();
-			session.update(person);
+			else{
+				session.update(person);
+				message = "Person updated";
+			}
 			transaction.commit();
-			message = "success";
 		}catch(HibernateException e){
 			if(transaction != null){
 				transaction.rollback();
@@ -165,10 +142,14 @@ public class PersonDao {
 	public List<RoleDto> getRoles(){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<RoleDto> roleDtos = new ArrayList<>();
+		List<Role> roles = new ArrayList<>();
 		try{
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Role.class);
-			roleDtos = criteria.list();
+			Criteria criteria = session.createCriteria(Role.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			roles = criteria.list();
+			for(Role role : roles){
+				roleDtos.add(roleToDto(role));
+			}
 			session.getTransaction().commit(); 
 		}catch(HibernateException e){
 			e.printStackTrace();
@@ -176,6 +157,13 @@ public class PersonDao {
 			session.close();
 		}
 		return roleDtos;
+	}
+
+	public RoleDto roleToDto(Role role){
+		RoleDto roleDto = new RoleDto();
+		roleDto.setId(role.getId());
+		roleDto.setRole(role.getRole());
+		return roleDto;
 	}
 
 	public PersonDto toDto(Person person){
