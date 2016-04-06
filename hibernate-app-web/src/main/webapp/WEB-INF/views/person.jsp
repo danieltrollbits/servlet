@@ -3,12 +3,11 @@
 
 <html>
 <head>
-	<title>Add Person</title>
+	<title>Person</title>
 </head>
 <body style="padding:2% 10% 10% 10%">
 	<form action="${pageContext.request.contextPath}/index" method="post">
 		<div class="row">
-			<div class="column column-6"><span style="color:green">${message}</span></div>
 			<div class="column column-6"><span style="color:red">${error}</span></div>
 			<c:forEach var="error" items="${errors}">
 				<div class="column column-6"><span style="color:red">${error}</span></div>
@@ -40,7 +39,7 @@
 				            <div class="column column-4">BirthDate<span class="required">*</span></div>
 				            <div class="column column-8">
 				            	<fmt:formatDate dateStyle="long" value="${person.birthdate}" var="formatDate"/>
-				            	<input type="text" name="birthdate" value="${formatDate}" placeholder="MMMM dd, yyyy">
+				            	<input type="text" name="birthdate" value="${formatDate}" placeholder="12-30-1900">
 				            </div>
 				        </div>
 				        <div class="row">
@@ -174,27 +173,37 @@
 				<legend>Contact</legend>
 				<c:if test="${!personId.isEmpty()}">
 					<c:forEach var="contact" items="${person.contactDtos}">
-						<div class="row">
-							<div class="column column-2">${contact.type}</div>
-							<div class="column column-4">
-								<input type="text" name="contactValue" value="${contact.value}">
+						<c:if test="${contact.id.toString() != '0'}">
+							<div class="row">
+								<div class="column column-2">${contact.type}</div>
+								<div class="column column-4">
+									<input type="text" name="savedContactValue" value="${contact.value}">
+								</div>
+								<input type="hidden" name="contactId" value="${contact.id}">
+								<input type="hidden" name="savedContactType" value="${contact.type}">
 							</div>
-							<input type="hidden" name="contactId" value="${contact.id}">
-							<input type="hidden" name="contactType" value="${contact.type}">
-						</div>
+						</c:if>
 					</c:forEach>
 				</c:if>
 				<div class="row">
+					<c:set var="cType" value=""/>
+					<c:set var="cVal" value=""/>
+					<c:forEach var="c" items="${person.contactDtos}">
+						<c:if test="${c.id == 0 || c.id == null}">
+							<c:set var="cType" value="${c.type}"/>
+							<c:set var="cVal" value="${c.value}"/>
+						</c:if>	
+					</c:forEach>
 					<div class="column column-2">Type</div>
 					<div class="column column-4">
-						<input type="radio" name="contactType" value="mobile"> Mobile
-						<input type="radio" name="contactType" value="phone"> Phone
+						<input type="radio" name="contactType" value="mobile" ${cType.toString().equals('MOBILE') ? 'checked' : ''}> Mobile
+						<input type="radio" name="contactType" value="phone" ${cType.toString().equals('PHONE') ? 'checked' : ''}> Phone
 					</div>
 				</div>
 				<div class="row">
 					<div class="column column-2">Number</div>
 					<div class="column column-4">
-						<input type="text" name="contactValue">
+						<input type="text" name="contactValue" value="${cVal}">
 					</div>
 				</div>
 			</fieldset>

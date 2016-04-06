@@ -35,15 +35,4 @@ public class RoleDto extends BaseDto {
 	public void setPersonDtos(Set<PersonDto> personDtos){
 		this.personDtos = personDtos;
 	}
-
-	public boolean equals(Object obj){
-		if (obj.toString().equalsIgnoreCase(this.role))
-			return true;
-		else
-			return false;
-	}
-
-	public int hashCode(){
-		return this.role.hashCode();
-	}
 }

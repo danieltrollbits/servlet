@@ -6,33 +6,19 @@
    <session-factory>
    <property name="hibernate.dialect">
       ${dialect}
-      <!-- org.hibernate.dialect.MySQLDialect -->
    </property>
    <property name="hibernate.connection.driver_class">
       ${driver}
-      <!-- com.mysql.jdbc.Driver -->
    </property>
    <property name="hibernate.connection.url">
       ${url}
-      <!-- jdbc:mysql://localhost/exercisedb -->
    </property>
    <property name="hibernate.connection.username">
       ${username}
-      <!-- root -->
    </property>
    <property name="hibernate.connection.password">
       ${password}
-      <!-- password -->
    </property>
-
-   <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
-   <property name="hibernate.cache.use_second_level_cache">true</property>
-   <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
- 
-   <!-- <property name="hibernate.hbm2ddl.auto">create-drop</property>
-   <property name="hibernate.hbm2ddl.import_files">
-      /03.21.2016.sql
-   </property> -->
    <property name="show_sql">true</property>
    <mapping class="com.training.hibernate.model.Person"/>
    <mapping class="com.training.hibernate.model.Address"/>

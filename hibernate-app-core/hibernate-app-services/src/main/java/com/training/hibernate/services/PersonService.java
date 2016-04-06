@@ -41,17 +41,7 @@ public class PersonService {
 	public PersonDto createPersonDto(String id, String firstName, String middleName, String lastName, String gender, String birthdate,
 		String employed, String gwa, String street, String houseNo, String barangay, String subdivision,
 		String city, String zipCode, String[] contactTypeList, String[] contactValueList, String[] contactId,
-		String[] roleList){
-
-		System.out.println("---------------");
-		System.out.println(id);
-		System.out.println(firstName);
-		System.out.println(gender);
-		System.out.println(birthdate);
-		System.out.println(contactTypeList);
-		System.out.println(contactValueList);
-		System.out.println(contactId);
-		System.out.println(roleList);
+		String[] roleList, String[] savedContactValueList, String[] savedContactTypeList){
 		
 		PersonDto personDto = new PersonDto();
 		if(!id.isEmpty()){
@@ -60,7 +50,7 @@ public class PersonService {
 			}
 		}
 		if(!birthdate.isEmpty()){
-			DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			Date date = null;
 			try{
 				date = df.parse(birthdate);
@@ -111,18 +101,30 @@ public class PersonService {
 		}
 		personDto.setAddressDto(addressDto);
 		Set<ContactDto> contactDtos = new HashSet<>();
+
+		System.out.println("---------------");
+		System.out.println(savedContactTypeList);
+		System.out.println(savedContactValueList);
+		System.out.println(contactId);
+		System.out.println("---------------");
+
+		if(savedContactTypeList !=null && savedContactValueList != null){
+			for(int i=0; i<savedContactTypeList.length; i++){
+				ContactDto contactDto = new ContactDto();
+				contactDto.setId(Integer.parseInt(contactId[i]));
+				contactDto.setType(Type.valueOf(savedContactTypeList[i].toUpperCase()));
+				contactDto.setValue(savedContactValueList[i]);
+				contactDtos.add(contactDto);
+			}
+		}
+
 		if(contactTypeList != null && contactValueList.length > 0){
 			for (int i=0; i<contactTypeList.length; i++){
 				ContactDto contactDto = new ContactDto();
-				if(contactId != null){
-					if(contactId[i] != null){
-						contactDto.setId(Integer.parseInt(contactId[i]));	
-					}
-				}
 				contactDto.setType(Type.valueOf(contactTypeList[i].toUpperCase()));
 				contactDto.setValue(contactValueList[i]);
 				contactDtos.add(contactDto);
-			}	
+			}
 		}
 		personDto.setContactDtos(contactDtos);
 		return personDto;
@@ -144,7 +146,7 @@ public class PersonService {
 	public boolean isDate(String strDate){
 		boolean isValid = false;
 		if(!strDate.isEmpty()){
-			DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			Date date = null;
 			try{
 				date = df.parse(strDate);

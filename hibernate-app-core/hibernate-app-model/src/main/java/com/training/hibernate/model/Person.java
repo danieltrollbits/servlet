@@ -38,7 +38,7 @@ public class Person extends BaseEntity {
 	private Set<Contact> contacts;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "PERSON_ROLE", joinColumns = { 
+	@JoinTable(name = "PERSON_ROLE", joinColumns = {
 			@JoinColumn(name = "person_id", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "role_id", 
 					nullable = false, updatable = false) })

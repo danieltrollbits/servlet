@@ -76,7 +76,8 @@ public class MainServlet extends HttpServlet{
 					request.getParameter("gwa"), request.getParameter("street"), request.getParameter("houseNo"),
 					request.getParameter("barangay"), request.getParameter("subdivision"), request.getParameter("city"),
 					request.getParameter("zipcode"), request.getParameterValues("contactType"),
-					request.getParameterValues("contactValue"), request.getParameterValues("contactId"), request.getParameterValues("role"));
+					request.getParameterValues("contactValue"), request.getParameterValues("contactId"),
+					request.getParameterValues("role"),request.getParameterValues("savedContactValue"),request.getParameterValues("savedContactType"));
 
 			boolean isRequired = personService.isRequired(request.getParameter("firstName"),
 					request.getParameter("middleName"), request.getParameter("lastName"),

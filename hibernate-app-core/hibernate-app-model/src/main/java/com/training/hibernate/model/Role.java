@@ -3,12 +3,8 @@ package com.training.hibernate.model;
 import java.util.*;
 import javax.persistence.*;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "ROLE")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="role")
 public class Role extends BaseEntity {
 
 	@Column(name="role")
