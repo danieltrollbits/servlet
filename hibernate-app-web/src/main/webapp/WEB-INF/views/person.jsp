@@ -9,6 +9,8 @@
 	<form action="${pageContext.request.contextPath}/index" method="post">
 		<div class="row">
 			<div class="column column-6"><span style="color:red">${error}</span></div>
+		</div>
+		<div class="row">
 			<c:forEach var="error" items="${errors}">
 				<div class="column column-6"><span style="color:red">${error}</span></div>
 			</c:forEach>
@@ -38,7 +40,7 @@
 				        <div class="row">
 				            <div class="column column-4">BirthDate<span class="required">*</span></div>
 				            <div class="column column-8">
-				            	<fmt:formatDate dateStyle="long" value="${person.birthdate}" var="formatDate"/>
+				            	<fmt:formatDate pattern="MM-dd-yyy" value="${person.birthdate}" var="formatDate"/>
 				            	<input type="text" name="birthdate" value="${formatDate}" placeholder="12-30-1900">
 				            </div>
 				        </div>
