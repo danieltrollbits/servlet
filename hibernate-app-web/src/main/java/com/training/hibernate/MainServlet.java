@@ -161,7 +161,7 @@ public class MainServlet extends HttpServlet{
 		if(contactTypeList != null && contactValueList != null){
 			for (int i=0; i<contactTypeList.length; i++){
 				ContactDto contactDto = new ContactDto();
-				if(contactId != null){
+				if(contactId != null || contactId != 0){
 					if(contactId[i] != null){
 						contactDto.setId(Integer.parseInt(contactId[i]));	
 					}
